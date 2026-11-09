@@ -1,0 +1,178 @@
+
+:root{
+    color-scheme:light;
+    --ink:#202a35;
+    --muted:#627181;
+    --paper:#f5f7f8;
+    --card:#fff;
+    --accent:#146b57;
+    --line:#dce3e5;
+    --obliged:#e22c2c;
+}
+
+* {
+    box-sizing:border-box;
+}
+
+body {
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+
+header {
+    padding:3rem max(1rem,calc((100% - 1120px)/2));
+    background:#153b35;
+    color:#fff;
+}
+
+header h1 {
+    margin:0;font-size:clamp(2rem,5vw,3.3rem);
+    letter-spacing:-.035em;
+}
+
+header p {
+    margin:.6rem 0 0;
+    color:#d5e7e1;
+}
+
+main {
+    max-width:1120px;
+    margin:2rem auto;
+    padding:0 1rem;
+}
+
+.panel {
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:1.3rem 1.5rem;
+    margin-bottom:1.25rem;
+    box-shadow:0 5px 18px #1c38340a;
+}
+
+button {
+    font:inherit;
+    cursor:pointer;
+    border:none;
+    border-radius:8px;
+    padding:.5rem 1rem;
+    margin:.25rem 0;
+    background:var(--accent);
+    color:#fff;
+}
+
+button:hover {
+    background:#0f4e3f;
+}
+
+h2 {
+    margin:.15rem 0 .75rem;
+    font-size:1.35rem;
+}
+
+p {
+    margin:.5rem 0;
+}
+
+.muted {
+    color:var(--muted);
+}
+
+code, pre {
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+
+pre {
+    overflow:auto;
+    padding:1rem;
+    background:#14221f;
+    color:#e0f1ea;
+    border-radius:9px;
+    font-size:.9rem
+}
+
+.command {
+    display:block;
+    white-space:pre-wrap;
+    background:#eef4f1;
+    color:#174b3f;
+    padding:.8rem 1rem;
+    border-radius:8px;
+    overflow-wrap:anywhere
+}
+
+.table-wrap {
+    overflow:auto;
+}
+
+.catalog {
+    width:100%;
+    border-collapse:collapse;
+    min-width:650px
+}
+
+.catalog th, .catalog td {
+    text-align:left;
+    padding:.7rem .8rem;
+    border-bottom:1px solid var(--line)
+}
+
+.catalog th {
+    background:#edf3f1;
+    position:sticky;
+    top:0
+}
+
+.catalog tbody tr:hover {
+    background:#f2f8f6;
+}
+
+.search {
+    width:min(100%,440px);
+    padding:.75rem;
+    border:1px solid #aebdc0;
+    border-radius:8px;
+    font:inherit;
+}
+
+.schema-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:.6rem 1.5rem;
+}
+
+.schema-grid p {
+    margin:0;
+}
+
+.pill {
+    display:inline-block;
+    background:#e5f2ed;
+    color:#145543;
+    padding:.15rem .5rem;
+    border-radius:99px;
+    font-size:.85rem;
+}
+
+footer {
+    color:var(--muted);
+    font-size:.9rem;
+    margin:1.5rem 0;
+}
+
+@media(max-width:600px) {
+    header {
+        padding:2rem 1rem;
+    }
+    
+    .panel {
+        padding:1rem;
+    }
+}
+
+/* add */
+.required {
+    color:var(--obliged);
+}

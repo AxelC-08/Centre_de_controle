@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ajouter un jeu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Ajouter un jeu</h1>
+        <p>Remplis les informations connues. Les champs sont facultatifs, sauf le nom.</p>
+    </header>
+
+    <main>
+        <section class="panel">
+            <form action="add.php" method="post">
+                <p>
+                    <label for="name">Nom du jeu <span class="required">*</span></label><br>
+                    <input id="name" name="name" type="text" required maxlength="200">
+                </p>
+
+                <p>
+                    <label for="players_label">Nombre de joueurs</label><br>
+                    <input id="players_label" name="players_label" type="text"
+                           placeholder="Ex. 2-6 ou 4+">
+                </p>
+
+                <p>
+                    <label for="players_min">Nombre minimum de joueurs (facultatif)</label><br>
+                    <input id="players_min" name="players_min" type="number" min="0">
+                </p>
+
+                <p>
+                    <label for="players_max">Nombre maximum de joueurs (facultatif)</label><br>
+                    <input id="players_max" name="players_max" type="number" min="0">
+                </p>
+
+                <p>
+                    <label for="duration_label">Durée</label><br>
+                    <input id="duration_label" name="duration_label" type="text"
+                           placeholder="Ex. 30 min">
+                </p>
+
+                <p>
+                    <label for="duration_min_minutes">Durée minimale en minutes (facultatif)</label><br>
+                    <input id="duration_min_minutes" name="duration_min_minutes"
+                           type="number" min="0">
+                </p>
+
+                <p>
+                    <label for="duration_max_minutes">Durée maximale en minutes (facultatif)</label><br>
+                    <input id="duration_max_minutes" name="duration_max_minutes"
+                           type="number" min="0">
+                </p>
+
+                <p>
+                    <label for="card_label">Nombre de cartes ou précision</label><br>
+                    <input id="card_label" name="card_label" type="text"
+                           placeholder="Ex. 54 ou Dépend">
+                </p>
+
+                <p>
+                    <label for="card_count">Nombre de cartes (facultatif)</label><br>
+                    <input id="card_count" name="card_count" type="number" min="0">
+                </p>
+
+                <p>
+                    <label for="rating">Note sur 5 (facultatif)</label><br>
+                    <input id="rating" name="rating" type="number"
+                           min="0" max="5" step="0.5">
+                </p>
+
+                <p>
+                    <label for="rating_label">Texte de la note (facultatif)</label><br>
+                    <input id="rating_label" name="rating_label" type="text">
+                </p>
+
+                <p class="required">
+                    * Champs obligatoires
+                </p>
+
+                <button type="submit" style="margin-right: 10px;">Enregistrer le jeu</button>
+                <a href="index.html">Annuler et revenir au catalogue</a>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
