@@ -36,29 +36,16 @@ try {
     $db = new PDO('sqlite:' . __DIR__ . '/jeux.db');
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $sql = 'INSERT INTO games (
-                name, players_min, players_max, players_label,
-                duration_min_minutes, duration_max_minutes, duration_label,
-                card_count, card_label, rating, rating_label
-            ) VALUES (
-                :name, :players_min, :players_max, :players_label,
-                :duration_min_minutes, :duration_max_minutes, :duration_label,
-                :card_count, :card_label, :rating, :rating_label
-            )';
+    $sql = 'INSERT INTO games (name, players_label, duration_label, card_label, rating
+            ) VALUES (:name, :players_label, :duration_label, :card_label, :rating)';
 
     $stmt = $db->prepare($sql);
     $stmt->execute([
         ':name' => $name,
-        ':players_min' => entier(valeur('players_min'), 'joueurs minimum'),
-        ':players_max' => entier(valeur('players_max'), 'joueurs maximum'),
         ':players_label' => valeur('players_label'),
-        ':duration_min_minutes' => entier(valeur('duration_min_minutes'), 'durée minimale'),
-        ':duration_max_minutes' => entier(valeur('duration_max_minutes'), 'durée maximale'),
         ':duration_label' => valeur('duration_label'),
-        ':card_count' => entier(valeur('card_count'), 'nombre de cartes'),
         ':card_label' => valeur('card_label'),
         ':rating' => valeur('rating'),
-        ':rating_label' => valeur('rating_label'),
     ]);
 
     header('Location: index.html?ajout=ok');

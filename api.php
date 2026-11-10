@@ -6,13 +6,21 @@ try {
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $query = $db->query(
-        'SELECT name, players_label, duration_label, card_label, rating
+        'SELECT id, name, players_label, duration_label, card_label, rating
          FROM games
          ORDER BY id'
     );
 
+    $games = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    $counter = $db->query('SELECT COUNT(*) FROM games');
+    $total = (int) $counter->fetchColumn();
+
     echo json_encode(
-        $query->fetchAll(PDO::FETCH_ASSOC),
+        [
+            'total' => $total,
+            'games' => $games
+        ],
         JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
     );
 } catch (Throwable $error) {

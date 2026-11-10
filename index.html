@@ -14,13 +14,17 @@
         <section class="panel">
             <h2>Requête anticipée:</h2>
             <button class="add-button" id="addButton" onclick="window.location.href='add.html'">Ajouter un jeu</button>
-            <button class="remove-button" id="removeButton" onclick="window.location.href='remove.html'">Supprimer un jeu</button>
+            <button class="remove-button" id="removeButton" onclick="window.location.href='supp.html'">Supprimer un jeu</button>
             <button class="update-button" id="updateButton" onclick="window.location.href='update.html'">Mettre à jour un jeu</button>
-            <p class="muted">Ces boutons sont des exemples d’actions qui pourraient être implémentées dans une version dynamique du catalogue. Dans cette version statique, ils ne font rien.</p>
+            <p class="muted">Ces boutons sont des actions dans une version dynamique du catalogue.</p>
         </section>
         <section class="panel">
             <h2>Catalogue</h2>
-            <p class="muted">85 entrées. Les informations inconnues ou indiquées « … » sont affichées comme non renseignées ; les doublons de la source sont conservés.</p>
+            <p class="muted">
+                <span id="entryCount">Chargement du nombre d’entrées…</span>.
+                Les informations inconnues ou indiquées « … » sont affichées comme non renseignées ;
+                les doublons de la source sont conservés.
+            </p>
             
             <label for="search">Filtrer le catalogue</label><br>
             <input class="search" id="search" type="search" placeholder="Nom, joueurs, durée ou cartes…" autocomplete="off">
@@ -29,6 +33,7 @@
                 <table class="catalog" id="games">
                     <thead>
                         <tr>
+                            <th>Identifiant</th>
                             <th>Nom du jeu</th>
                             <th>Nombre de joueurs</th>
                             <th>Durée moyenne</th>
@@ -44,54 +49,15 @@
                 </table>
             </div>
         </section>
-        <section class="panel">
-            <h2>Schéma SQLite</h2>
-            <p>Le fichier autonome <code>jeux_schema.sql</code> contient la création de la table et les INSERT des jeux extraits ci-dessus. Les champs numériques sont NULL si la source n’indique pas de valeur numérique. Les libellés source (par exemple « Beaucoup », « Variable », « Dépend ») sont conservés séparément.</p>
-            <div class="schema-grid">
-                <p><code>id</code> — identifiant unique (INTEGER PRIMARY KEY)</p>
-                <p><code>name</code> — nom du jeu (TEXT, obligatoire)</p>
-                <p><code>players_min</code> / <code>players_max</code> — bornes numériques (INTEGER, NULL si inconnue / sans borne)</p>
-                <p><code>players_label</code> — libellé source des joueurs (TEXT)</p>
-                <p><code>duration_min_minutes</code> / <code>duration_max_minutes</code> — durée en minutes (INTEGER, nullable)</p>
-                <p><code>duration_label</code> — texte de durée de la source (TEXT)</p>
-                <p><code>card_count</code> — nombre de cartes numérique (INTEGER, nullable)</p>
-                <p><code>card_label</code> — précision source, notamment si non numérique (TEXT)</p>
-                <p><code>rating</code> — note sur 5 (REAL, nullable)</p>
-                <p><code>rating_label</code> — affichage d’origine de la note (TEXT)</p>
-            </div>
-            <h2 style="margin-top:1.2rem">Créer la base de données</h2>
-            <p>Depuis le dossier où se trouve <code>jeux_schema.sql</code>, exécutez cette commande avec SQLite installé :</p>
-            <code class="command">sqlite3 jeux.db &lt; jeux_schema.sql</code>
-            <p>Cette commande crée/remplit <code>jeux.db</code>. Pour vérifier le nombre de lignes : <code>sqlite3 jeux.db "SELECT COUNT(*) FROM games;"</code>. Pour consulter le catalogue : <code>sqlite3 -header -column jeux.db "SELECT name, players_label, duration_label, rating FROM games ORDER BY name;"</code>.</p>
-        </section>
-        <section class="panel">
-            <h2>DDL de la table</h2>
-            <pre>
-                <code>CREATE TABLE IF NOT EXISTS games (
-                id INTEGER PRIMARY KEY,
-                name TEXT NOT NULL,
-                players_min INTEGER CHECK (players_min IS NULL OR players_min &gt;= 0),
-                players_max INTEGER CHECK (players_max IS NULL OR players_max &gt;= 0),
-                players_label TEXT,
-                duration_min_minutes INTEGER CHECK (duration_min_minutes IS NULL OR duration_min_minutes &gt;= 0),
-                duration_max_minutes INTEGER CHECK (duration_max_minutes IS NULL OR duration_max_minutes &gt;= 0),
-                duration_label TEXT,
-                card_count INTEGER CHECK (card_count IS NULL OR card_count &gt;= 0),
-                card_label TEXT,
-                rating REAL CHECK (rating IS NULL OR (rating &gt;= 0 AND rating &lt;= 5)),
-                rating_label TEXT
-                );</code>
-            </pre>
-            <p class="muted">Le DDL ci-dessus est documenté pour consultation ; le fichier SQL autonome est la source exécutable qui inclut aussi les données.</p>
-        </section>
         <footer>
-            Catalogue statique généré à partir de la page fournie. La recherche filtre les lignes affichées dans cette page ; elle ne modifie pas la base SQLite.
+            Catalogue statique. La recherche filtre les lignes affichées dans cette page. Elle ne modifie pas la base SQLite.
         </footer>
     </main>
     <script>
         const search = document.getElementById('search');
         const body = document.getElementById('gameRows');
         const count = document.getElementById('count');
+        const entryCount = document.getElementById('entryCount');
         let rows = [];
 
         function filterGames() {
@@ -108,6 +74,36 @@
                 `${visible} jeu${visible > 1 ? 'x' : ''} affiché${visible > 1 ? 's' : ''} sur ${rows.length}.`;
         }
 
+        function createRatingImages(rating) {
+            const container = document.createElement('span');
+            container.className = 'rating';
+
+            if (rating === null || rating === undefined) {
+                container.textContent = 'Non notée';
+                return container;
+            }
+
+            for (let i = 0; i < 5; i++) {
+                let file;
+
+                if (i + 1 <= rating) {
+                    file = 'star-full.svg';
+                } else if (i < rating) {
+                    file = 'star-half.svg';
+                } else {
+                    file = 'star.svg';
+                }
+
+                const img = document.createElement('img');
+                img.src = `image/${file}`;
+                img.alt = '';
+                img.className = 'rating-star';
+                container.appendChild(img);
+            }
+
+            return container;
+        }
+
         async function loadGames() {
             try {
                 const response = await fetch('api.php');
@@ -116,18 +112,22 @@
                     throw new Error(`Erreur HTTP ${response.status}`);
                 }
 
-                const games = await response.json();
+                const data = await response.json();
+                const games = data.games;
+
+                entryCount.textContent =
+                    `${data.total} entrée${data.total > 1 ? 's' : ''}`;
                 body.replaceChildren();
 
                 for (const game of games) {
                     const tr = document.createElement('tr');
 
                     const values = [
+                        game.id,
                         game.name,
                         game.players_label || '—',
                         game.duration_label || '—',
-                        game.card_label || '—',
-                        game.rating === null ? 'Non notée' : `${game.rating}/5`
+                        game.card_label || '—'
                     ];
 
                     for (const value of values) {
@@ -135,6 +135,10 @@
                         td.textContent = value;
                         tr.appendChild(td);
                     }
+
+                    const ratingCell = document.createElement('td');
+                    ratingCell.appendChild(createRatingImages(game.rating));
+                    tr.appendChild(ratingCell);
 
                     body.appendChild(tr);
                 }

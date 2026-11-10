@@ -84,6 +84,18 @@ code, pre {
     font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
 }
 
+.rating {
+    display: inline-flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.rating-star {
+    width: 20px;
+    height: 20px;
+    color: #f5c518;
+} 
+
 pre {
     overflow:auto;
     padding:1rem;

@@ -1,0 +1,8 @@
+- Jeu coopératif
+- Image jeu
+- (image étoile)bonus
+
+
+Commande:
+- php -S localhost:8000                 Pour lancer le server et control C pour l'arrêter
+- sqlite3 jeux.db < jeux_schema.sql     Refait la base de donnée
