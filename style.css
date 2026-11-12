@@ -2,7 +2,7 @@
     --transition: all 0.3s ease;
 }
 
-/* Thème Clair (défaut) */
+/* Thème Clair */
 [data-theme="clair"] {
     --bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --card-bg: #ffffff;
@@ -13,6 +13,8 @@
     --link-hover-text: #ffffff;
     --accent: #667eea;
     --shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    --footer-bg: rgba(255, 255, 255, 0.1);
+    --footer-text: rgba(255, 255, 255, 0.9);
 }
 
 /* Thème Sombre */
@@ -26,19 +28,23 @@
     --link-hover-text: #ffffff;
     --accent: #805ad5;
     --shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    --footer-bg: rgba(0, 0, 0, 0.3);
+    --footer-text: rgba(255, 255, 255, 0.7);
 }
 
-/* Thème Paris Cité (Bleu officiel + Rouge) */
+/* Thème Paris Cité */
 [data-theme="pariscite"] {
     --bg: linear-gradient(135deg, #a7005f 0%, #610039 100%);
     --card-bg: #ffffff;
-    --text: #800048;
+    --text: #003366;
     --text-secondary: #4a5568;
     --link-bg: #f0f4f8;
-    --link-hover-bg: #cc0018; /* Rouge Paris Cité */
+    --link-hover-bg: #E2001A;
     --link-hover-text: #ffffff;
-    --accent: #cc0018;
+    --accent: #E2001A;
     --shadow: 0 20px 60px rgba(0, 51, 102, 0.4);
+    --footer-bg: rgba(0, 51, 102, 0.15);
+    --footer-text: rgba(255, 255, 255, 0.9);
 }
 
 * {
@@ -52,9 +58,7 @@ body {
     background: var(--bg);
     min-height: 100vh;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
+    flex-direction: column;
     transition: var(--transition);
 }
 
@@ -73,83 +77,200 @@ body {
     color: var(--text);
     font-size: 0.9rem;
     cursor: pointer;
-    outline: none;
     transition: var(--transition);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .theme-selector select:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
 }
 
 .container {
     background: var(--card-bg);
     border-radius: 20px;
-    box-shadow: var(--shadow);
     padding: 3rem;
-    max-width: 480px;
+    box-shadow: var(--shadow);
+    max-width: 600px;
     width: 100%;
     transition: var(--transition);
 }
 
-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
 h1 {
     color: var(--text);
-    font-size: 1.6rem;
-    margin-bottom: 0.75rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
     transition: var(--transition);
 }
 
 .subtitle {
+    text-align: center;
     color: var(--text-secondary);
-    font-size: 0.95rem;
-    line-height: 1.5;
+    margin-bottom: 2rem;
     transition: var(--transition);
 }
 
 .links {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+}
+
+.links li {
+    margin-bottom: 1rem;
 }
 
 .links a {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
+    padding: 1rem 1.5rem;
     background: var(--link-bg);
-    border: 2px solid transparent;
     border-radius: 12px;
     text-decoration: none;
     color: var(--text);
-    font-weight: 600;
+    font-weight: 500;
     transition: var(--transition);
+    border: 2px solid transparent;
 }
 
 .links a:hover {
     background: var(--link-hover-bg);
     color: var(--link-hover-text);
-    transform: translateX(6px);
+    transform: translateX(10px);
     border-color: var(--accent);
 }
 
 .icon {
-    font-size: 1.4rem;
+    margin-right: 1rem;
+    font-size: 1.3rem;
 }
 
-/* Animation d'apparition */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+/* FOOTER */
+footer {
+    background: var(--footer-bg);
+    color: var(--footer-text);
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: auto;
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
 }
 
-.container {
-    animation: fadeIn 0.5s ease;
+footer p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* ===== Page Évaluations ===== */
+.eval-section {
+    margin-top: 2rem;
+}
+
+.eval-section h2 {
+    color: var(--text);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 0.4rem;
+    transition: var(--transition);
+}
+
+.eval-card {
+    background: var(--link-bg);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--accent);
+    transition: var(--transition);
+}
+
+.eval-card:hover {
+    transform: translateX(5px);
+}
+
+.eval-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.badge {
+    padding: 0.25rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.badge-math { background: #667eea; }
+.badge-info { background: #48bb78; }
+.badge-physique { background: #ed8936; }
+.badge-sae { background: #E2001A; }
+
+.eval-date {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.eval-date.deadline {
+    color: #e53e3e;
+    font-weight: 600;
+}
+
+.eval-card h3 {
+    color: var(--text);
+    margin-bottom: 0.3rem;
+    transition: var(--transition);
+}
+
+.eval-chapitres, .eval-desc {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+/* Sujet déroulant */
+.sujet-details {
+    margin-top: 0.8rem;
+}
+
+.sujet-details summary {
+    cursor: pointer;
+    color: var(--accent);
+    font-weight: 600;
+    padding: 0.4rem 0;
+    user-select: none;
+}
+
+.sujet-details summary:hover {
+    text-decoration: underline;
+}
+
+.sujet-content {
+    margin-top: 0.6rem;
+    padding: 1rem;
+    background: var(--card-bg);
+    border-radius: 8px;
+    color: var(--text);
+    transition: var(--transition);
+}
+
+.sujet-content ul {
+    padding-left: 1.2rem;
+}
+
+.sujet-content li {
+    margin-bottom: 0.3rem;
+    color: var(--text-secondary);
 }
