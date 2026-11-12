@@ -30,14 +30,14 @@
 
 /* Thème Paris Cité (Bleu officiel + Rouge) */
 [data-theme="pariscite"] {
-    --bg: linear-gradient(135deg, #003366 0%, #004080 100%);
+    --bg: linear-gradient(135deg, #a7005f 0%, #610039 100%);
     --card-bg: #ffffff;
-    --text: #003366;
+    --text: #800048;
     --text-secondary: #4a5568;
     --link-bg: #f0f4f8;
-    --link-hover-bg: #E2001A; /* Rouge Paris Cité */
+    --link-hover-bg: #cc0018; /* Rouge Paris Cité */
     --link-hover-text: #ffffff;
-    --accent: #E2001A;
+    --accent: #cc0018;
     --shadow: 0 20px 60px rgba(0, 51, 102, 0.4);
 }
 
