@@ -1,161 +1,34 @@
-<!doctype html>
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="fr" data-theme="clair">
 <head>
-    <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Catalogue de jeux de société</title>
-    <link rel="StyleSheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centralisation IUT Paris Cité</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <header>
-        <h1>Jeux de société</h1>
-        <p>Catalogue personnel — données reprises de la liste source, y compris ses champs incomplets.</p>
-    </header>
-    <main>
-        <section class="panel">
-            <h2>Requête anticipée:</h2>
-            <button class="add-button" id="addButton" onclick="window.location.href='add.html'">Ajouter un jeu</button>
-            <button class="remove-button" id="removeButton" onclick="window.location.href='supp.html'">Supprimer un jeu</button>
-            <button class="update-button" id="updateButton" onclick="window.location.href='update.html'">Mettre à jour un jeu</button>
-            <p class="muted">Ces boutons sont des actions dans une version dynamique du catalogue.</p>
-        </section>
-        <section class="panel">
-            <h2>Catalogue</h2>
-            <p class="muted">
-                <span id="entryCount">Chargement du nombre d’entrées…</span>.
-                Les informations inconnues ou indiquées « … » sont affichées comme non renseignées ;
-                les doublons de la source sont conservés.
-            </p>
-            
-            <label for="search">Filtrer le catalogue</label><br>
-            <input class="search" id="search" type="search" placeholder="Nom, joueurs, durée ou cartes…" autocomplete="off">
-            <p id="count" class="muted" aria-live="polite"></p>
-            <div class="table-wrap" style="margin-top:1rem">
-                <table class="catalog" id="games">
-                    <thead>
-                        <tr>
-                            <th>Identifiant</th>
-                            <th>Nom du jeu</th>
-                            <th>Nombre de joueurs</th>
-                            <th>Durée moyenne</th>
-                            <th>Nombre de cartes</th>
-                            <th>Note</th>
-                        </tr>
-                    </thead>
-                    <tbody id="gameRows">
-                        <tr>
-                            <td colspan="5">Chargement du catalogue…</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-        <footer>
-            Catalogue statique. La recherche filtre les lignes affichées dans cette page. Elle ne modifie pas la base SQLite.
-        </footer>
+    <div class="theme-selector">
+        <select id="themeSelect" onchange="changeTheme(this.value)">
+            <option value="clair">☀️ Clair</option>
+            <option value="sombre">🌙 Sombre</option>
+            <option value="pariscite">🎓 Paris Cité</option>
+        </select>
+    </div>
+
+    <main class="container">
+        <header>
+            <h1>Centralisation IUT Paris Cité</h1>
+            <p class="subtitle">Bienvenue sur le site de centralisation de l'IUT Paris Cité. Retrouvez ci-dessous les liens vers vos ressources :</p>
+        </header>
+
+        <ul class="links">
+            <li><a href="https://edt.raph9213.xyz/" target="_blank" rel="noopener"><span class="icon">📅</span><span>EDT 3ᵉ année</span></a></li>
+            <li><a href="https://but.daisseur.xyz/semaine" target="_blank" rel="noopener"><span class="icon">📅</span><span>EDT 1ʳᵉ année</span></a></li>
+            <li><a href="https://moodle2026.u-pariscite.fr/" target="_blank" rel="noopener"><span class="icon">🎓</span><span>Moodle</span></a></li>
+            <li><a href="https://outlook.cloud.microsoft/mail/" target="_blank" rel="noopener"><span class="icon">✉️</span><span>Mail</span></a></li>
+            <li><a href="https://up75-my.sharepoint.com/" target="_blank" rel="noopener"><span class="icon">☁️</span><span>OneDrive</span></a></li>
+        </ul>
     </main>
-    <script>
-        const search = document.getElementById('search');
-        const body = document.getElementById('gameRows');
-        const count = document.getElementById('count');
-        const entryCount = document.getElementById('entryCount');
-        let rows = [];
-
-        function filterGames() {
-            const query = search.value.trim().toLocaleLowerCase('fr');
-            let visible = 0;
-
-            for (const row of rows) {
-                const matches = row.textContent.toLocaleLowerCase('fr').includes(query);
-                row.hidden = !matches;
-                if (matches) visible++;
-            }
-
-            count.textContent =
-                `${visible} jeu${visible > 1 ? 'x' : ''} affiché${visible > 1 ? 's' : ''} sur ${rows.length}.`;
-        }
-
-        function createRatingImages(rating) {
-            const container = document.createElement('span');
-            container.className = 'rating';
-
-            if (rating === null || rating === undefined) {
-                container.textContent = 'Non notée';
-                return container;
-            }
-
-            for (let i = 0; i < 5; i++) {
-                let file;
-
-                if (i + 1 <= rating) {
-                    file = 'star-full.svg';
-                } else if (i < rating) {
-                    file = 'star-half.svg';
-                } else {
-                    file = 'star.svg';
-                }
-
-                const img = document.createElement('img');
-                img.src = `image/${file}`;
-                img.alt = '';
-                img.className = 'rating-star';
-                container.appendChild(img);
-            }
-
-            return container;
-        }
-
-        async function loadGames() {
-            try {
-                const response = await fetch('api.php');
-
-                if (!response.ok) {
-                    throw new Error(`Erreur HTTP ${response.status}`);
-                }
-
-                const data = await response.json();
-                const games = data.games;
-
-                entryCount.textContent =
-                    `${data.total} entrée${data.total > 1 ? 's' : ''}`;
-                body.replaceChildren();
-
-                for (const game of games) {
-                    const tr = document.createElement('tr');
-
-                    const values = [
-                        game.id,
-                        game.name,
-                        game.players_label || '—',
-                        game.duration_label || '—',
-                        game.card_label || '—'
-                    ];
-
-                    for (const value of values) {
-                        const td = document.createElement('td');
-                        td.textContent = value;
-                        tr.appendChild(td);
-                    }
-
-                    const ratingCell = document.createElement('td');
-                    ratingCell.appendChild(createRatingImages(game.rating));
-                    tr.appendChild(ratingCell);
-
-                    body.appendChild(tr);
-                }
-
-                rows = [...body.querySelectorAll('tr')];
-                filterGames();
-            } catch (error) {
-                body.innerHTML =
-                    '<tr><td colspan="5">Impossible de charger le catalogue. Vérifie que le serveur PHP fonctionne et que la base existe.</td></tr>';
-                count.textContent = '';
-                console.error('Erreur de chargement du catalogue :', error);
-            }
-        }
-
-        search.addEventListener('input', filterGames);
-        loadGames();
-    </script>
-    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"8607d2a720d14b038279025b2b5a82e5","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
